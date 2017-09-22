@@ -4,37 +4,36 @@
         <item
             android:id="@+id/nav_active_stock"
             android:checked="true"
-            android:title="活跃股" />
+            android:title="我的笔记" />
         <item
             android:id="@+id/nav_quota_stock"
-            android:title="指标股" />
-        <item
-            android:id="@+id/nav_research_stock"
-            android:title="研报股" />
-        <item
-            android:id="@+id/nav_death_stock"
-            android:title="敢死队股" />
+            android:title="发现" />
 
+    </group>
+    <group android:checkableBehavior="all">
+        <item android:title="成员一" />
+        <item android:title="成员2" />
+        <item android:title="成员san" />
     </group>
 
     <item android:title="更多">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:title="点广告支持开发"
-                android:visible="false" />
+                android:title="支持我"
+                android:visible="true" />
             <item
                 android:id="@+id/nav_send"
                 android:title="建议反馈"
                 android:visible="true" />
             <item
                 android:id="@+id/nav_future"
-                android:title="即将到来的功能"
-                android:visible="false" />
+                android:title="more"
+                android:visible="true" />
 
             <item
                 android:id="@+id/nav_update"
-                android:title="检查更新" />
+                android:title="关于我" />
         </menu>
     </item>
 </menu>

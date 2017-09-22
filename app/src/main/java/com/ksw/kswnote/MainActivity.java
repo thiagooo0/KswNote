@@ -7,10 +7,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -18,7 +20,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        //插入一个新的toolbar
         initToolBar();
+        //初始化侧边栏
         initDrawerLayout();
     }
 
@@ -31,21 +35,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initDrawerLayout() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //显示拖动状态的控件
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                toolbar.setTitle("ssssssssssssssss");
+                //我们可以在这里做一点东西
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                toolbar.setTitle("hhhhhhhhhhhhhhh");
+                //我们可以在这里做一点东西
             }
         };
         drawer.addDrawerListener(toggle);
+        //显示右上角的三杠图标
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -83,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawer(Gravity.START);
+        return true;
     }
 }
