@@ -14,7 +14,7 @@ import java.util.List;
  * Created by KwokSiuWang on 2017/9/24.
  */
 
-public class SimpleAdapter<T> extends XRecyclerView.Adapter<BaseViewHolder> {
+public class BaseAdapter<T> extends XRecyclerView.Adapter<BaseViewHolder> {
     /**
      * 数据源
      */
@@ -30,7 +30,7 @@ public class SimpleAdapter<T> extends XRecyclerView.Adapter<BaseViewHolder> {
      */
     private int brId;
 
-    public SimpleAdapter(List<T> mData, int layoutId, int brId) {
+    public BaseAdapter(List<T> mData, int layoutId, int brId) {
         this.mData = mData;
         this.layoutId = layoutId;
         this.brId = brId;

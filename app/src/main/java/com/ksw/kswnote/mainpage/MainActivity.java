@@ -21,10 +21,9 @@ import com.ksw.kswnote.R;
 import com.ksw.kswnote.been.LocalNote;
 import com.ksw.kswnote.been.Note;
 import com.ksw.kswnote.databinding.ActivityMainBinding;
-import com.ksw.kswnote.mrecyclerview.SimpleAdapter;
+import com.ksw.kswnote.mrecyclerview.BaseAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActivityMainBinding binding;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //插入布局
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-//        //插入一个新的toolbar
+        //插入一个新的toolbar
         initToolBar();
         //初始化侧边栏
         initDrawerLayout();
@@ -64,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+        //一无所有的时候显示什么
+        binding.layoutMainPage.recyclerView.setEmptyView(binding.layoutMainPage.emptyView.getRoot());
 
         ArrayList<Note> list = new ArrayList<Note>();
         list.add(new LocalNote("还等吗，你爱戴钻戒，要他爱戴吗"));
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         list.add(new LocalNote("谈你谈我的新趣味，无法忘记当天的你"));
         list.add(new LocalNote("完完全全共醉他生也愿意"));
 
-        SimpleAdapter adapter = new SimpleAdapter(list, R.layout.item_note, BR.note);
+        BaseAdapter adapter = new BaseAdapter(null, R.layout.item_note, BR.note);
         binding.layoutMainPage.recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
