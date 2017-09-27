@@ -16,9 +16,10 @@
         android:layout_height="150dp"
         android:layout_margin="8dp"
         android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:longClickable="true"
-        app:cardElevation="8dp"
-        app:cardCornerRadius="3dp">
+        app:cardCornerRadius="3dp"
+        app:cardElevation="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"

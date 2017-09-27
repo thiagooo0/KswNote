@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -39,47 +40,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //初始化侧边栏
         initDrawerLayout();
 
-        initRecycleView();
+//        initRecycleView();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content , new MainPageFragment()).commit();
+
     }
 
-    private void initRecycleView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        binding.layoutMainPage.recyclerView.setLayoutManager(linearLayoutManager);
-        //设置Item增加、移除动画
-//        binding.layoutMainPage.recyclerView.addHeaderView(headerView);
-        binding.layoutMainPage.recyclerView.setItemAnimator(new DefaultItemAnimator());
-        binding.layoutMainPage.recyclerView.setLoadingMoreEnabled(true);
-        binding.layoutMainPage.recyclerView.setRefreshProgressStyle(ProgressStyle.BallClipRotateMultiple);
-        binding.layoutMainPage.recyclerView.setLoadingMoreProgressStyle(ProgressStyle.LineScaleParty);
-        binding.layoutMainPage.recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-
-            }
-
-            @Override
-            public void onLoadMore() {
-
-            }
-        });
-        //一无所有的时候显示什么
-        binding.layoutMainPage.recyclerView.setEmptyView(binding.layoutMainPage.emptyView.getRoot());
-
-        ArrayList<Note> list = new ArrayList<Note>();
-        list.add(new LocalNote("还等吗，你爱戴钻戒，要他爱戴吗"));
-        list.add(new LocalNote("无人忘记仍能闪闪发光"));
-        list.add(new LocalNote("何必等他一吻去韬光"));
-        list.add(new LocalNote("从某年某天某地"));
-        list.add(new LocalNote("谁得到过愿放手"));
-        list.add(new LocalNote("如果失约在这生，无需相见在某年"));
-        list.add(new LocalNote("谈你谈我的新趣味，无法忘记当天的你"));
-        list.add(new LocalNote("完完全全共醉他生也愿意"));
-
-        BaseAdapter adapter = new BaseAdapter(null, R.layout.item_note, BR.note);
-        binding.layoutMainPage.recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
+//    private void initRecycleView() {
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        binding.layoutMainPage.recyclerView.setLayoutManager(linearLayoutManager);
+//        //设置Item增加、移除动画
+////        binding.layoutMainPage.recyclerView.addHeaderView(headerView);
+//        binding.layoutMainPage.recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        binding.layoutMainPage.recyclerView.setLoadingMoreEnabled(true);
+//        binding.layoutMainPage.recyclerView.setRefreshProgressStyle(ProgressStyle.BallClipRotateMultiple);
+//        binding.layoutMainPage.recyclerView.setLoadingMoreProgressStyle(ProgressStyle.LineScaleParty);
+//        binding.layoutMainPage.recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+//            @Override
+//            public void onRefresh() {
+//
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//
+//            }
+//        });
+//        //一无所有的时候显示什么
+//        binding.layoutMainPage.recyclerView.setEmptyView(binding.layoutMainPage.emptyView.getRoot());
+//
+//        ArrayList<Note> list = new ArrayList<Note>();
+//        list.add(new LocalNote("还等吗，你爱戴钻戒，要他爱戴吗"));
+//        list.add(new LocalNote("无人忘记仍能闪闪发光"));
+//        list.add(new LocalNote("何必等他一吻去韬光"));
+//        list.add(new LocalNote("从某年某天某地"));
+//        list.add(new LocalNote("谁得到过愿放手"));
+//        list.add(new LocalNote("如果失约在这生，无需相见在某年"));
+//        list.add(new LocalNote("谈你谈我的新趣味，无法忘记当天的你"));
+//        list.add(new LocalNote("完完全全共醉他生也愿意"));
+//
+//        BaseAdapter adapter = new BaseAdapter(list, R.layout.item_note, BR.note);
+//        binding.layoutMainPage.recyclerView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+//    }
 
     private void initToolBar() {
 //        toolbar = (Toolbar) findViewById(R.id.toolbar);
