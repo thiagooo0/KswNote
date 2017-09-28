@@ -7,24 +7,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Toast;
 
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.ksw.kswnote.BR;
 import com.ksw.kswnote.R;
-import com.ksw.kswnote.been.LocalNote;
-import com.ksw.kswnote.been.Note;
+import com.ksw.kswnote.addnote.AddNoteFragment;
 import com.ksw.kswnote.databinding.ActivityMainBinding;
-import com.ksw.kswnote.mrecyclerview.BaseAdapter;
 
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActivityMainBinding binding;
@@ -41,8 +32,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initDrawerLayout();
 
 //        initRecycleView();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content , new MainPageFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainPageFragment()).commit();
 
+        initFloatingButton();
+    }
+
+    private void initFloatingButton() {
+        binding.layoutMainPage.floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "floating", Toast.LENGTH_SHORT).show();
+                AddNoteFragment fragment = new AddNoteFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+
+
+//                binding.layoutMainPage.floatingActionButton.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // 圆形动画的x坐标  位于View的中心
+//                        int cx = (v.getLeft() + v.getRight()) / 2;
+//
+//                        //圆形动画的y坐标  位于View的中心
+//                        int cy = (v.getTop() + v.getBottom()) / 2;
+//
+//                        //起始大小半径
+//                        float startX = 0f;
+//
+//                        //结束大小半径 大小为图片对角线的一半
+//                        float startY = (float) Math.sqrt(cx * cx + cy * cy);
+//                        Animator animator = ViewAnimationUtils.createCircularReveal(binding.layoutMainPage.content, cx, cy, 0, binding.layoutMainPage.getRoot().getHeight());
+//
+//                        //在动画开始的地方速率改变比较慢,然后开始加速
+//                        animator.setInterpolator(new AccelerateInterpolator());
+//                        animator.setDuration(600);
+//                        animator.start();
+//                    }
+//                });
+            }
+        });
     }
 
 //    private void initRecycleView() {

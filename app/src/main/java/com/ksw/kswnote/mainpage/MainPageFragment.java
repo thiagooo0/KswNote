@@ -36,6 +36,9 @@ public class MainPageFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+    private void initFloatingButton(){
+    }
+
     private void initRecycleView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
