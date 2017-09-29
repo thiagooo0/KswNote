@@ -2,7 +2,6 @@ package com.ksw.kswnote.mainpage;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -36,7 +35,7 @@ public class MainPageFragment extends BaseFragment {
         return binding.getRoot();
     }
 
-    private void initFloatingButton(){
+    private void initFloatingButton() {
     }
 
     private void initRecycleView() {
@@ -75,5 +74,10 @@ public class MainPageFragment extends BaseFragment {
         BaseAdapter adapter = new BaseAdapter(list, R.layout.item_note, BR.note);
         binding.recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public FragmentType getType() {
+        return FragmentType.MainPageFragment;
     }
 }

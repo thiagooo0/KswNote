@@ -1,8 +1,11 @@
 package com.ksw.kswnote.mainpage;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,15 +13,22 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Toast;
 
 import com.ksw.kswnote.R;
 import com.ksw.kswnote.addnote.AddNoteFragment;
+import com.ksw.kswnote.base.BaseFragment;
+import com.ksw.kswnote.base.BaseFragment.FragmentType;
 import com.ksw.kswnote.databinding.ActivityMainBinding;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActivityMainBinding binding;
+    private BaseFragment currentFragment;
+    private MainPageFragment mainPageFragment;
+    private AddNoteFragment addNoteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,42 +42,155 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initDrawerLayout();
 
 //        initRecycleView();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainPageFragment()).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainPageFragment()).commit();
+        if (savedInstanceState == null) {
+            mainPageFragment = new MainPageFragment();
+            //底下是首页笔记列表
+            getSupportFragmentManager().beginTransaction().add(R.id.main_content, mainPageFragment).commit();
+            currentFragment = mainPageFragment;
+        }
 
         initFloatingButton();
+    }
+
+    private void showFragmentContent() {
+        int cx = (binding.layoutMainPage.floatingActionButton.getLeft()
+                + binding.layoutMainPage.floatingActionButton.getRight()) / 2;
+        int cy = (binding.layoutMainPage.floatingActionButton.getTop()
+                + binding.layoutMainPage.floatingActionButton.getBottom()) / 2 - binding.layoutMainPage.toolbar.getHeight();
+        //做动画
+        Animator animator = ViewAnimationUtils.createCircularReveal(binding.layoutMainPage.content
+                , cx, cy, 0, binding.layoutMainPage.content.getHeight());
+
+
+        //在动画开始的地方速率改变比较慢,然后开始加速
+        animator.setInterpolator(new AccelerateInterpolator());
+        animator.setDuration(300);
+        animator.start();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                binding.layoutMainPage.content.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                binding.layoutMainPage.mainContent.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void hideFragmentContent() {
+        int cx = (binding.layoutMainPage.floatingActionButton.getLeft()
+                + binding.layoutMainPage.floatingActionButton.getRight()) / 2;
+        int cy = (binding.layoutMainPage.floatingActionButton.getTop()
+                + binding.layoutMainPage.floatingActionButton.getBottom()) / 2 - binding.layoutMainPage.toolbar.getHeight();
+
+        binding.layoutMainPage.mainContent.setVisibility(View.VISIBLE);
+
+        //做动画
+        Animator animator = ViewAnimationUtils.createCircularReveal(binding.layoutMainPage.content
+                , cx, cy, binding.layoutMainPage.content.getHeight(), 0);
+
+        //在动画开始的地方速率改变比较慢,然后开始加速
+        animator.setInterpolator(new AccelerateInterpolator());
+        animator.setDuration(300);
+        animator.start();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                binding.layoutMainPage.content.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    /**
+     * 更新fragment
+     **/
+    public void updateFragment(BaseFragment.FragmentType type) {
+        if (currentFragment == null) {
+            currentFragment = mainPageFragment;
+        } else {
+            //自己切换成自己就不用麻烦了
+            if (currentFragment.getType() != type) {
+                FragmentManager manager = getSupportFragmentManager();
+                //回到推荐列表
+                if (type == FragmentType.MainPageFragment) {
+//                    binding.layoutMainPage.content.bringToFront();
+                    currentFragment = mainPageFragment;
+                    hideFragmentContent();
+                } else {
+                    //在推荐列表上新增东西
+                    if (currentFragment.getType() == FragmentType.MainPageFragment) {
+                        binding.layoutMainPage.content.bringToFront();
+                        binding.layoutMainPage.content.setVisibility(View.VISIBLE);
+
+                        //添加新笔记
+                        if (type == FragmentType.AddNoteFragment) {
+                            if (addNoteFragment == null) {
+                                addNoteFragment = new AddNoteFragment();
+                            }
+                            if (addNoteFragment.isAdded()) {
+                                manager.beginTransaction().show(addNoteFragment).commit();
+                            } else {
+                                manager.beginTransaction().add(R.id.content, addNoteFragment).commit();
+                            }
+                            currentFragment = addNoteFragment;
+                        }
+                        showFragmentContent();
+                    }
+                    //在推荐列表上切换
+                    else {
+
+                    }
+
+                }
+
+//                //如果是从首页切换到其他页面的话
+//                if (currentFragment.getType() == BaseFragment.FragmentType.MainPageFragment) {
+//                    //如果是切换到添加笔记页面
+//                    if (type == BaseFragment.FragmentType.AddNoteFragment) {
+//
+////                        manager.beginTransaction().add(R.id.content, addNoteFragment)
+////                                .hide(mainPageFragment).commit();
+//                        currentFragment = addNoteFragment;
+//                    }
+//                } else if (currentFragment.getType() == BaseFragment.FragmentType.AddNoteFragment) {
+//                    //如果是切换回主页
+//                    if (type == BaseFragment.FragmentType.MainPageFragment) {
+//                        if (mainPageFragment.isAdded()) {
+//                            manager.beginTransaction().hide(addNoteFragment).commit();
+//                        } else {
+////                            manager.beginTransaction().add(R.id.content, mainPageFragment).commit();
+//                        }
+//                        currentFragment = mainPageFragment;
+//                    }
+//                }
+            }
+        }
     }
 
     private void initFloatingButton() {
         binding.layoutMainPage.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "floating", Toast.LENGTH_SHORT).show();
-                AddNoteFragment fragment = new AddNoteFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+                int cx = (v.getLeft() + v.getRight()) / 2 + 100;
+                int cy = (v.getTop() + v.getBottom()) / 2 + 100;
 
-
-//                binding.layoutMainPage.floatingActionButton.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // 圆形动画的x坐标  位于View的中心
-//                        int cx = (v.getLeft() + v.getRight()) / 2;
-//
-//                        //圆形动画的y坐标  位于View的中心
-//                        int cy = (v.getTop() + v.getBottom()) / 2;
-//
-//                        //起始大小半径
-//                        float startX = 0f;
-//
-//                        //结束大小半径 大小为图片对角线的一半
-//                        float startY = (float) Math.sqrt(cx * cx + cy * cy);
-//                        Animator animator = ViewAnimationUtils.createCircularReveal(binding.layoutMainPage.content, cx, cy, 0, binding.layoutMainPage.getRoot().getHeight());
-//
-//                        //在动画开始的地方速率改变比较慢,然后开始加速
-//                        animator.setInterpolator(new AccelerateInterpolator());
-//                        animator.setDuration(600);
-//                        animator.start();
-//                    }
-//                });
+//                AddNoteFragment fragment = new AddNoteFragment();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+                if (currentFragment.getType() == FragmentType.AddNoteFragment) {
+                    //切换到主页
+//                    mainPageFragment.setShowCircularReveal(true, cx, cy);
+//                    updateFragment(FragmentType.MainPageFragment);
+                    addNoteFragment.completeNote();
+                } else if (currentFragment.getType() == FragmentType.MainPageFragment) {
+//                    addNoteFragment.setShowCircularReveal(true, cx, cy);
+                    updateFragment(FragmentType.AddNoteFragment);
+                }
             }
         });
     }

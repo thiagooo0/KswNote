@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
  * Created by KwokSiuWang on 2017/9/27.
  */
 
-public class BaseFragment extends Fragment {
-    public String getName() {
-        return "";
-    }
+public abstract class BaseFragment extends Fragment {
+    public enum FragmentType {AddNoteFragment, MainPageFragment}
+
+    public abstract FragmentType getType();
 }

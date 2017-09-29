@@ -8,14 +8,30 @@
         android:background="#fff">
 
         <TextView
+            android:id="@+id/tv_notebook"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:text="1000340"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="#20000000"
+            android:elevation="16dp"
+            android:padding="16dp"
+            android:text="笔记本：默认"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_note"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
+            android:background="#20000000"
+            android:elevation="16dp"
+            android:padding="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_notebook" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>

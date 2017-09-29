@@ -24,6 +24,11 @@ public class LocalNote implements Note {
         return strNote;
     }
 
+    @Override
+    public NoteBook getNoteBook() {
+        return null;
+    }
+
     public String getStrNote() {
         return strNote;
     }

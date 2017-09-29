@@ -10,4 +10,9 @@ public interface Note {
      * 得到笔记的内容
      */
     public String getNote();
+
+    /**
+     * @return 属于哪个笔记本
+     */
+    public NoteBook getNoteBook();
 }
