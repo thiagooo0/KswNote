@@ -7,6 +7,7 @@ package com.ksw.kswnote.been;
 
 public class LocalNote implements Note {
 
+    private int id;
     private String content;
     private String title;
     private long time;
@@ -17,6 +18,12 @@ public class LocalNote implements Note {
     }
 
     public LocalNote(String strNote) {
+        this.content = strNote;
+        time = System.currentTimeMillis();
+    }
+    public LocalNote(int id, String title, String strNote) {
+        this.id = id;
+        this.title = title;
         this.content = strNote;
         time = System.currentTimeMillis();
     }
@@ -34,6 +41,22 @@ public class LocalNote implements Note {
     @Override
     public String getTitle() {
         return title;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setContent(String content) {

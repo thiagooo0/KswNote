@@ -78,4 +78,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public Observable<Long> saveNote(Note note) {
         return noteTable.saveNote(database, note);
     }
+
+    public Observable<ArrayList<Note>> getRecommendNote() {
+        return noteTable.getRecommendNote(database);
+    }
 }

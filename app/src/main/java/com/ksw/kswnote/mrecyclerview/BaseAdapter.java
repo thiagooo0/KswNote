@@ -2,11 +2,13 @@ package com.ksw.kswnote.mrecyclerview;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ public class BaseAdapter<T> extends XRecyclerView.Adapter<BaseViewHolder> {
      */
     private int brId;
 
-    public BaseAdapter(List<T> mData, int layoutId, int brId) {
+    public BaseAdapter(@NonNull List<T> mData, int layoutId, int brId) {
         this.mData = mData;
         this.layoutId = layoutId;
         this.brId = brId;
@@ -54,5 +56,10 @@ public class BaseAdapter<T> extends XRecyclerView.Adapter<BaseViewHolder> {
     @Override
     public int getItemCount() {
         return mData == null ? 0 : mData.size();
+    }
+
+    public void updateDate(ArrayList<T> data) {
+        this.mData = data;
+        notifyDataSetChanged();
     }
 }

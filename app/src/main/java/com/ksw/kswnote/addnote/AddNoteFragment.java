@@ -11,35 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jakewharton.rxbinding2.view.RxView;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.ksw.kswnote.R;
 import com.ksw.kswnote.base.BaseFragment;
 import com.ksw.kswnote.been.LocalNote;
 import com.ksw.kswnote.been.LocalNoteBook;
+import com.ksw.kswnote.been.Note;
 import com.ksw.kswnote.been.NoteBook;
 import com.ksw.kswnote.databinding.FragmentAddNoteBinding;
 import com.ksw.kswnote.db.SQLiteHelper;
 import com.ksw.kswnote.mainpage.MainActivity;
-import com.squareup.sqlbrite2.BriteContentResolver;
-import com.squareup.sqlbrite2.BriteDatabase;
-import com.squareup.sqlbrite2.SqlBrite;
 
-import org.reactivestreams.Subscription;
-
-import java.util.ArrayList;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.IntFunction;
-import io.reactivex.internal.subscriptions.ArrayCompositeSubscription;
-import io.reactivex.schedulers.Schedulers;
-
 /**
  * 添加笔记
  * Created by KwokSiuWang on 2017/9/28.
@@ -96,7 +78,7 @@ public class AddNoteFragment extends BaseFragment {
             note.setContent(text);
             new SQLiteHelper(getActivity(), null)
                     .saveNote(note)
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(aLong -> {
                         binding.etNote.setText("");
                         ((MainActivity) getActivity()).updateFragment(FragmentType.MainPageFragment);
@@ -104,6 +86,7 @@ public class AddNoteFragment extends BaseFragment {
         } else {
             ((MainActivity) getActivity()).updateFragment(FragmentType.MainPageFragment);
         }
+
 //        SqlBrite brite = new SqlBrite.Builder().build();
 //        BriteDatabase database = brite.wrapDatabaseHelper(new SQLiteHelper(getActivity(), null), Schedulers.io());
 //        ContentValues contentValues = new ContentValues();

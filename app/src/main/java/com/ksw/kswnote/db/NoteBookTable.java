@@ -36,7 +36,7 @@ class NoteBookTable {
      * get all the book
      */
     Observable<ArrayList<NoteBook>> getAllNoteBooks(BriteDatabase database) {
-        return database.createQuery("notebook", "select * from notebook")
+        return database.createQuery(strTableName, "select * from " + strTableName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .map(new Function<SqlBrite.Query, ArrayList<NoteBook>>() {
@@ -55,6 +55,5 @@ class NoteBookTable {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
-
     }
 }
