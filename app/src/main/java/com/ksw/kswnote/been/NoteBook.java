@@ -8,5 +8,9 @@ import java.util.ArrayList;
  */
 
 public interface NoteBook {
-    public ArrayList<Note> getNotes();
+    ArrayList<Note> getNotes();
+
+    String getTitle();
+
+    int getLocalID();
 }

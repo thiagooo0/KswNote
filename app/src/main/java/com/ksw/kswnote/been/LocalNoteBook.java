@@ -10,6 +10,22 @@ import java.util.ArrayList;
 public class LocalNoteBook implements NoteBook {
     private ArrayList<Note> notes = new ArrayList<>();
 
+    private String title;
+    private int localID;
+
+    public LocalNoteBook(String title, int localID) {
+        this.title = title;
+        this.localID = localID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getLocalID() {
+        return localID;
+    }
+
     @Override
     public ArrayList<Note> getNotes() {
         return notes;

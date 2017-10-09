@@ -15,4 +15,9 @@ public interface Note {
      * @return 属于哪个笔记本
      */
     public NoteBook getNoteBook();
+
+    /**
+     * @return 笔记的标题
+     */
+    public String getTitle();
 }

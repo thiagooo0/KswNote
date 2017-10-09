@@ -17,11 +17,17 @@ import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.AdapterViewItemClickEvent;
 import com.ksw.kswnote.R;
 import com.ksw.kswnote.addnote.AddNoteFragment;
 import com.ksw.kswnote.base.BaseFragment;
 import com.ksw.kswnote.base.BaseFragment.FragmentType;
 import com.ksw.kswnote.databinding.ActivityMainBinding;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -142,100 +148,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         showFragmentContent();
                     }
-                    //在推荐列表上切换
-                    else {
-
-                    }
-
                 }
-
-//                //如果是从首页切换到其他页面的话
-//                if (currentFragment.getType() == BaseFragment.FragmentType.MainPageFragment) {
-//                    //如果是切换到添加笔记页面
-//                    if (type == BaseFragment.FragmentType.AddNoteFragment) {
-//
-////                        manager.beginTransaction().add(R.id.content, addNoteFragment)
-////                                .hide(mainPageFragment).commit();
-//                        currentFragment = addNoteFragment;
-//                    }
-//                } else if (currentFragment.getType() == BaseFragment.FragmentType.AddNoteFragment) {
-//                    //如果是切换回主页
-//                    if (type == BaseFragment.FragmentType.MainPageFragment) {
-//                        if (mainPageFragment.isAdded()) {
-//                            manager.beginTransaction().hide(addNoteFragment).commit();
-//                        } else {
-////                            manager.beginTransaction().add(R.id.content, mainPageFragment).commit();
-//                        }
-//                        currentFragment = mainPageFragment;
-//                    }
-//                }
             }
         }
     }
 
+    /**
+     * floating button的设置，基本就是推荐笔记列表和写笔记的切换。
+     */
     private void initFloatingButton() {
-        binding.layoutMainPage.floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int cx = (v.getLeft() + v.getRight()) / 2 + 100;
-                int cy = (v.getTop() + v.getBottom()) / 2 + 100;
-
-//                AddNoteFragment fragment = new AddNoteFragment();
-//                getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
-                if (currentFragment.getType() == FragmentType.AddNoteFragment) {
-                    //切换到主页
-//                    mainPageFragment.setShowCircularReveal(true, cx, cy);
-//                    updateFragment(FragmentType.MainPageFragment);
-                    addNoteFragment.completeNote();
-                } else if (currentFragment.getType() == FragmentType.MainPageFragment) {
-//                    addNoteFragment.setShowCircularReveal(true, cx, cy);
-                    updateFragment(FragmentType.AddNoteFragment);
-                }
-            }
-        });
-    }
-
-//    private void initRecycleView() {
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        binding.layoutMainPage.recyclerView.setLayoutManager(linearLayoutManager);
-//        //设置Item增加、移除动画
-////        binding.layoutMainPage.recyclerView.addHeaderView(headerView);
-//        binding.layoutMainPage.recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        binding.layoutMainPage.recyclerView.setLoadingMoreEnabled(true);
-//        binding.layoutMainPage.recyclerView.setRefreshProgressStyle(ProgressStyle.BallClipRotateMultiple);
-//        binding.layoutMainPage.recyclerView.setLoadingMoreProgressStyle(ProgressStyle.LineScaleParty);
-//        binding.layoutMainPage.recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        RxView
+                .clicks(binding.layoutMainPage.floatingActionButton)
+                .throttleFirst(400, TimeUnit.MILLISECONDS)//抖动过滤
+                .subscribe(o -> {
+                    if (currentFragment.getType() == FragmentType.AddNoteFragment) {
+                        //切换到主页，通知添加笔记本的碎片
+                        addNoteFragment.completeNote();
+                    } else if (currentFragment.getType() == FragmentType.MainPageFragment) {
+                        //添加笔记本吧
+                        updateFragment(FragmentType.AddNoteFragment);
+                    }
+                });
+//        binding.layoutMainPage.floatingActionButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onRefresh() {
-//
-//            }
-//
-//            @Override
-//            public void onLoadMore() {
+//            public void onClick(View v) {
 //
 //            }
 //        });
-//        //一无所有的时候显示什么
-//        binding.layoutMainPage.recyclerView.setEmptyView(binding.layoutMainPage.emptyView.getRoot());
-//
-//        ArrayList<Note> list = new ArrayList<Note>();
-//        list.add(new LocalNote("还等吗，你爱戴钻戒，要他爱戴吗"));
-//        list.add(new LocalNote("无人忘记仍能闪闪发光"));
-//        list.add(new LocalNote("何必等他一吻去韬光"));
-//        list.add(new LocalNote("从某年某天某地"));
-//        list.add(new LocalNote("谁得到过愿放手"));
-//        list.add(new LocalNote("如果失约在这生，无需相见在某年"));
-//        list.add(new LocalNote("谈你谈我的新趣味，无法忘记当天的你"));
-//        list.add(new LocalNote("完完全全共醉他生也愿意"));
-//
-//        BaseAdapter adapter = new BaseAdapter(list, R.layout.item_note, BR.note);
-//        binding.layoutMainPage.recyclerView.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
-//    }
+    }
 
     private void initToolBar() {
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(binding.layoutMainPage.toolbar);
     }
 

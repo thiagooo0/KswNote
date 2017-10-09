@@ -7,38 +7,46 @@ package com.ksw.kswnote.been;
 
 public class LocalNote implements Note {
 
-    private String strNote;
+    private String content;
+    private String title;
     private long time;
+    private NoteBook noteBook;
 
     public LocalNote() {
 
     }
 
     public LocalNote(String strNote) {
-        this.strNote = strNote;
+        this.content = strNote;
         time = System.currentTimeMillis();
     }
 
     @Override
     public String getNote() {
-        return strNote;
+        return content;
     }
 
     @Override
     public NoteBook getNoteBook() {
-        return null;
+        return noteBook;
     }
 
-    public String getStrNote() {
-        return strNote;
+    @Override
+    public String getTitle() {
+        return title;
     }
 
-    public void setStrNote(String strNote) {
-        this.strNote = strNote;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public long getTime() {
         return time;
+    }
+
+
+    public void setNoteBook(NoteBook noteBook) {
+        this.noteBook = noteBook;
     }
 
     public void setTime(long time) {
