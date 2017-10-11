@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MainPageFragment mainPageFragment;
     private AddNoteFragment addNoteFragment;
 
+    private final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        initRecycleView();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainPageFragment()).commit();
         if (savedInstanceState == null) {
+            Log.d(TAG, "new a main page fragment");
             mainPageFragment = new MainPageFragment();
             //底下是首页笔记列表
             getSupportFragmentManager().beginTransaction().add(R.id.main_content, mainPageFragment).commit();
@@ -167,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } else if (currentFragment.getType() == FragmentType.MainPageFragment) {
                         //添加笔记本吧
                         updateFragment(FragmentType.AddNoteFragment);
+
                     }
                 });
 //        binding.layoutMainPage.floatingActionButton.setOnClickListener(new View.OnClickListener() {

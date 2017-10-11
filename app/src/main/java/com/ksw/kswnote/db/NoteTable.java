@@ -53,7 +53,7 @@ class NoteTable {
                 values.put(strContent, note.getNote());
                 values.put(strNoteBookID, note.getNoteBook().getLocalID());
                 long l = database.insert(strTableName, values);
-                database.close();
+//                database.close();
                 Log.d("notetable", "insert reuslt:" + l);
                 e.onNext(l);
             }

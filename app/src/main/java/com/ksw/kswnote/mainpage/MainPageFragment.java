@@ -2,6 +2,7 @@ package com.ksw.kswnote.mainpage;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -14,22 +15,15 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.ksw.kswnote.BR;
 import com.ksw.kswnote.R;
 import com.ksw.kswnote.base.BaseFragment;
-import com.ksw.kswnote.been.LocalNote;
 import com.ksw.kswnote.been.Note;
 import com.ksw.kswnote.databinding.FragmentMainPageBinding;
 import com.ksw.kswnote.db.SQLiteHelper;
 import com.ksw.kswnote.mrecyclerview.BaseAdapter;
 
 import java.util.ArrayList;
-import java.util.Observable;
 
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-
-import static io.reactivex.Observable.fromArray;
 
 /**
  * 显示笔记列表
@@ -37,14 +31,22 @@ import static io.reactivex.Observable.fromArray;
  */
 
 public class MainPageFragment extends BaseFragment {
+    private final String TAG = MainPageFragment.class.getSimpleName();
     private FragmentMainPageBinding binding;
     BaseAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_page, container, false);
+
         initRecycleView();
+        updateData();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -55,7 +57,6 @@ public class MainPageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateData();
         Log.d("MainPageFragment", "onResume");
     }
 
@@ -92,7 +93,7 @@ public class MainPageFragment extends BaseFragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void updateData() {
+    public void updateData() {
         Log.d("MainPageFragment", "updateData");
 //        ArrayList<Note> list = new ArrayList<Note>();
 //        list.add(new LocalNote("还等吗，你爱戴钻戒，要他爱戴吗"));
@@ -111,7 +112,10 @@ public class MainPageFragment extends BaseFragment {
                 .subscribe(new Consumer<ArrayList<Note>>() {
                     @Override
                     public void accept(ArrayList<Note> notes) throws Exception {
-                        adapter.updateDate(notes);
+                        Log.d(TAG, "get new recommend note");
+                        if (adapter != null) {
+                            adapter.updateDate(notes);
+                        }
                     }
                 });
 //                .flatMap(new Function<ArrayList<Note>, ObservableSource<Note>>() {
@@ -128,6 +132,7 @@ public class MainPageFragment extends BaseFragment {
 //                    }
 //                });
     }
+
 
     @Override
     public FragmentType getType() {
