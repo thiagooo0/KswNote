@@ -19,7 +19,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
-import com.jakewharton.rxbinding2.widget.AdapterViewItemClickEvent;
 import com.ksw.kswnote.R;
 import com.ksw.kswnote.addnote.AddNoteFragment;
 import com.ksw.kswnote.base.BaseFragment;
@@ -27,8 +26,6 @@ import com.ksw.kswnote.base.BaseFragment.FragmentType;
 import com.ksw.kswnote.databinding.ActivityMainBinding;
 
 import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //初始化侧边栏
         initDrawerLayout();
 
-//        initRecycleView();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.content, new MainPageFragment()).commit();
         if (savedInstanceState == null) {
             Log.d(TAG, "new a main page fragment");
             mainPageFragment = new MainPageFragment();
@@ -63,7 +58,73 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initFloatingButton();
     }
 
-    private void showFragmentContent() {
+    /**
+     * 更新fragment
+     **/
+    public void updateFragment(BaseFragment.FragmentType type) {
+        if (currentFragment == null) {
+            currentFragment = mainPageFragment;
+        } else {
+            //自己切换成自己就不用麻烦了
+            if (currentFragment.getType() != type) {
+                FragmentManager manager = getSupportFragmentManager();
+                //回到推荐列表
+                if (type == FragmentType.MainPageFragment) {
+//                    binding.layoutMainPage.content.bringToFront();
+
+                    if (currentFragment.getType() == FragmentType.AddNoteFragment) {
+                        hideAddNoteFragment();
+                    }
+                    //刷新数据
+                    mainPageFragment.updateData();
+                    currentFragment = mainPageFragment;
+                } else {
+                    //在推荐列表上新增东西
+                    if (currentFragment.getType() == FragmentType.MainPageFragment) {
+                        binding.layoutMainPage.content.bringToFront();
+                        binding.layoutMainPage.content.setVisibility(View.VISIBLE);
+
+                        //添加新笔记
+                        if (type == FragmentType.AddNoteFragment) {
+                            if (addNoteFragment == null) {
+                                addNoteFragment = new AddNoteFragment();
+                            }
+                            if (addNoteFragment.isAdded()) {
+                                manager.beginTransaction().show(addNoteFragment).commit();
+                            } else {
+                                manager.beginTransaction().add(R.id.content, addNoteFragment).commit();
+                            }
+                            currentFragment = addNoteFragment;
+                        }
+                        showAddNoteFragment();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * floating button的设置，基本就是推荐笔记列表和写笔记的切换。
+     */
+    private void initFloatingButton() {
+        RxView
+                .clicks(binding.layoutMainPage.floatingActionButton)
+                .throttleFirst(400, TimeUnit.MILLISECONDS)//抖动过滤
+                .subscribe(o -> {
+                    if (currentFragment.getType() == FragmentType.AddNoteFragment) {
+                        //切换到主页，通知添加笔记本的碎片
+                        addNoteFragment.completeNote();
+                    } else if (currentFragment.getType() == FragmentType.MainPageFragment) {
+                        //添加笔记本吧
+                        updateFragment(FragmentType.AddNoteFragment);
+                    }
+                });
+    }
+
+    /**
+     * 显示添加笔记的碎片
+     */
+    private void showAddNoteFragment() {
         int cx = (binding.layoutMainPage.floatingActionButton.getLeft()
                 + binding.layoutMainPage.floatingActionButton.getRight()) / 2;
         int cy = (binding.layoutMainPage.floatingActionButton.getTop()
@@ -92,7 +153,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void hideFragmentContent() {
+    /**
+     * 隐藏添加笔记的碎片
+     */
+    private void hideAddNoteFragment() {
         int cx = (binding.layoutMainPage.floatingActionButton.getLeft()
                 + binding.layoutMainPage.floatingActionButton.getRight()) / 2;
         int cy = (binding.layoutMainPage.floatingActionButton.getTop()
@@ -115,71 +179,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 binding.layoutMainPage.content.setVisibility(View.GONE);
             }
         });
-    }
-
-    /**
-     * 更新fragment
-     **/
-    public void updateFragment(BaseFragment.FragmentType type) {
-        if (currentFragment == null) {
-            currentFragment = mainPageFragment;
-        } else {
-            //自己切换成自己就不用麻烦了
-            if (currentFragment.getType() != type) {
-                FragmentManager manager = getSupportFragmentManager();
-                //回到推荐列表
-                if (type == FragmentType.MainPageFragment) {
-//                    binding.layoutMainPage.content.bringToFront();
-                    currentFragment = mainPageFragment;
-                    hideFragmentContent();
-                } else {
-                    //在推荐列表上新增东西
-                    if (currentFragment.getType() == FragmentType.MainPageFragment) {
-                        binding.layoutMainPage.content.bringToFront();
-                        binding.layoutMainPage.content.setVisibility(View.VISIBLE);
-
-                        //添加新笔记
-                        if (type == FragmentType.AddNoteFragment) {
-                            if (addNoteFragment == null) {
-                                addNoteFragment = new AddNoteFragment();
-                            }
-                            if (addNoteFragment.isAdded()) {
-                                manager.beginTransaction().show(addNoteFragment).commit();
-                            } else {
-                                manager.beginTransaction().add(R.id.content, addNoteFragment).commit();
-                            }
-                            currentFragment = addNoteFragment;
-                        }
-                        showFragmentContent();
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * floating button的设置，基本就是推荐笔记列表和写笔记的切换。
-     */
-    private void initFloatingButton() {
-        RxView
-                .clicks(binding.layoutMainPage.floatingActionButton)
-                .throttleFirst(400, TimeUnit.MILLISECONDS)//抖动过滤
-                .subscribe(o -> {
-                    if (currentFragment.getType() == FragmentType.AddNoteFragment) {
-                        //切换到主页，通知添加笔记本的碎片
-                        addNoteFragment.completeNote();
-                    } else if (currentFragment.getType() == FragmentType.MainPageFragment) {
-                        //添加笔记本吧
-                        updateFragment(FragmentType.AddNoteFragment);
-
-                    }
-                });
-//        binding.layoutMainPage.floatingActionButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
     }
 
     private void initToolBar() {

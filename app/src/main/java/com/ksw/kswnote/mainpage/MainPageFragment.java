@@ -1,6 +1,9 @@
 package com.ksw.kswnote.mainpage;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableField;
+import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,6 +25,8 @@ import com.ksw.kswnote.mrecyclerview.BaseAdapter;
 
 import java.util.ArrayList;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
@@ -33,7 +38,9 @@ import io.reactivex.functions.Consumer;
 public class MainPageFragment extends BaseFragment {
     private final String TAG = MainPageFragment.class.getSimpleName();
     private FragmentMainPageBinding binding;
-    BaseAdapter adapter;
+    private BaseAdapter adapter;
+
+    private ObservableField<ArrayList<Note>> noteList = new ObservableField<>(new ArrayList<>());
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,19 +125,6 @@ public class MainPageFragment extends BaseFragment {
                         }
                     }
                 });
-//                .flatMap(new Function<ArrayList<Note>, ObservableSource<Note>>() {
-//                    @Override
-//                    public ObservableSource<Note> apply(@NonNull ArrayList<Note> notes) throws Exception {
-//                        return io.reactivex.Observable.fromIterable(notes);
-//                    }
-//                })
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<Note>() {
-//                    @Override
-//                    public void accept(Note note) throws Exception {
-//                        Log.d("MainPageFragment", "note:" + note.getTitle() + " - " + note.getNote());
-//                    }
-//                });
     }
 
 

@@ -1,8 +1,5 @@
 package com.ksw.kswnote.addnote;
 
-
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,18 +12,17 @@ import com.ksw.kswnote.R;
 import com.ksw.kswnote.base.BaseFragment;
 import com.ksw.kswnote.been.LocalNote;
 import com.ksw.kswnote.been.LocalNoteBook;
-import com.ksw.kswnote.been.Note;
 import com.ksw.kswnote.been.NoteBook;
 import com.ksw.kswnote.databinding.FragmentAddNoteBinding;
 import com.ksw.kswnote.db.SQLiteHelper;
 import com.ksw.kswnote.mainpage.MainActivity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+
 /**
  * 添加笔记
  * Created by KwokSiuWang on 2017/9/28.
  */
-
 public class AddNoteFragment extends BaseFragment {
     private FragmentAddNoteBinding binding;
     /**
@@ -62,7 +58,7 @@ public class AddNoteFragment extends BaseFragment {
         helper.getAllNotes()
                 .subscribe(noteBooks -> {
                     for (NoteBook book : noteBooks) {
-                        Log.d("DATABASE", book.getTitle() + " : " + ((LocalNoteBook) book).getLocalID());
+                        Log.d("DATABASE", book.getTitle() + " : " + book.getLocalID());
                     }
                     if (noteBooks.size() != 0) {
                         localNoteBook = noteBooks.get(0);
@@ -86,31 +82,6 @@ public class AddNoteFragment extends BaseFragment {
         } else {
             ((MainActivity) getActivity()).updateFragment(FragmentType.MainPageFragment);
         }
-
-//        SqlBrite brite = new SqlBrite.Builder().build();
-//        BriteDatabase database = brite.wrapDatabaseHelper(new SQLiteHelper(getActivity(), null), Schedulers.io());
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put();
-//        database.insert("note", null, )
-//        Observable<SqlBrite.Query> notebooks = database.createQuery("notebook", "select * from notebook");
-//
-//        notebooks.observeOn(Schedulers.io())
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<SqlBrite.Query>() {
-//                    @Override
-//                    public void accept(SqlBrite.Query query) throws Exception {
-//                        Cursor cursor = query.run();
-//                        if (cursor != null) {
-//                            while (cursor.moveToNext()) {
-//                                Log.d("database", cursor.getString(cursor.getColumnIndex("name")));
-//                            }
-//                        } else {
-//                            Log.d("database", "cursor is null");
-//                        }
-//                    }
-//                });
-
-
     }
 
     @Override
