@@ -7,7 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
+import com.ksw.kswnote.BR;
 import com.ksw.kswnote.R;
 import com.ksw.kswnote.base.BaseFragment;
 import com.ksw.kswnote.been.LocalNote;
@@ -16,6 +20,7 @@ import com.ksw.kswnote.been.NoteBook;
 import com.ksw.kswnote.databinding.FragmentAddNoteBinding;
 import com.ksw.kswnote.db.SQLiteHelper;
 import com.ksw.kswnote.mainpage.MainActivity;
+import com.ksw.kswnote.mrecyclerview.BaseRecycleAdapter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -56,6 +61,7 @@ public class AddNoteFragment extends BaseFragment {
     private void getNotebooks() {
         SQLiteHelper helper = new SQLiteHelper(getContext(), null);
         helper.getAllNotes()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(noteBooks -> {
                     for (NoteBook book : noteBooks) {
                         Log.d("DATABASE", book.getTitle() + " : " + book.getLocalID());
@@ -63,6 +69,21 @@ public class AddNoteFragment extends BaseFragment {
                     if (noteBooks.size() != 0) {
                         localNoteBook = noteBooks.get(0);
                     }
+
+                    NBSpinnerAdapter adapter = new NBSpinnerAdapter(getContext(), noteBooks);
+                    binding.spinnerNotebook.setAdapter(adapter);
+                    binding.spinnerNotebook.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Toast.makeText(getContext(), noteBooks.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
                 });
     }
 

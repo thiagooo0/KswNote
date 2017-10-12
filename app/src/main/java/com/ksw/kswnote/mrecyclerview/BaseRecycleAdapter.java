@@ -16,7 +16,7 @@ import java.util.List;
  * Created by KwokSiuWang on 2017/9/24.
  */
 
-public class BaseAdapter<T> extends XRecyclerView.Adapter<BaseViewHolder> {
+public class BaseRecycleAdapter<T> extends XRecyclerView.Adapter<BaseRecycleViewHolder> {
     /**
      * 数据源
      */
@@ -32,23 +32,23 @@ public class BaseAdapter<T> extends XRecyclerView.Adapter<BaseViewHolder> {
      */
     private int brId;
 
-    public BaseAdapter(@NonNull List<T> mData, int layoutId, int brId) {
+    public BaseRecycleAdapter(@NonNull List<T> mData, int layoutId, int brId) {
         this.mData = mData;
         this.layoutId = layoutId;
         this.brId = brId;
     }
 
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseRecycleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ViewDataBinding binding = DataBindingUtil.inflate(inflater, layoutId, parent, false);
-        BaseViewHolder baseViewHolder = new BaseViewHolder(binding.getRoot());
+        BaseRecycleViewHolder baseViewHolder = new BaseRecycleViewHolder(binding.getRoot());
         baseViewHolder.setBinding(binding);
         return baseViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
+    public void onBindViewHolder(BaseRecycleViewHolder holder, int position) {
         holder.getBinding().setVariable(brId, mData.get(position));
         holder.getBinding().executePendingBindings();
     }

@@ -1,9 +1,7 @@
 package com.ksw.kswnote.mainpage;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
-import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,12 +19,10 @@ import com.ksw.kswnote.base.BaseFragment;
 import com.ksw.kswnote.been.Note;
 import com.ksw.kswnote.databinding.FragmentMainPageBinding;
 import com.ksw.kswnote.db.SQLiteHelper;
-import com.ksw.kswnote.mrecyclerview.BaseAdapter;
+import com.ksw.kswnote.mrecyclerview.BaseRecycleAdapter;
 
 import java.util.ArrayList;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
@@ -38,7 +34,7 @@ import io.reactivex.functions.Consumer;
 public class MainPageFragment extends BaseFragment {
     private final String TAG = MainPageFragment.class.getSimpleName();
     private FragmentMainPageBinding binding;
-    private BaseAdapter adapter;
+    private BaseRecycleAdapter adapter;
 
     private ObservableField<ArrayList<Note>> noteList = new ObservableField<>(new ArrayList<>());
 
@@ -95,7 +91,7 @@ public class MainPageFragment extends BaseFragment {
         binding.recyclerView.setEmptyView(binding.emptyView.getRoot());
 
 
-        adapter = new BaseAdapter(null, R.layout.item_note, BR.note);
+        adapter = new BaseRecycleAdapter(null, R.layout.item_note, BR.note);
         binding.recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

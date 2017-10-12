@@ -3,4 +3,9 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="add_note_spinner_title">选择笔记本</string>
+    <string name="add_note_tint_title">笔记的标题</string>
+    <string name="add_note_tint_content">笔记的标题</string>
+
 </resources>

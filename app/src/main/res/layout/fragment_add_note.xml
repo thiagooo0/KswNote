@@ -1,37 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/tv_notebook"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="#20000000"
-            android:elevation="16dp"
-            android:padding="16dp"
-            android:text="笔记本：默认"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff">
 
-        <EditText
-            android:id="@+id/et_note"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginTop="16dp"
-            android:background="#20000000"
-            android:elevation="16dp"
-            android:padding="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_notebook" />
+            <Spinner
+                android:id="@+id/spinner_notebook"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:dropDownVerticalOffset="48dp"
+                android:padding="8dp"
+                android:prompt="@string/add_note_spinner_title"
+                android:spinnerMode="dropdown"
+                android:text="笔记本：默认"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+            <!--<EditText-->
+            <!--android:id="@+id/et_note_title"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="16dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:background="#20000000"-->
+            <!--android:hint="@string/add_note_tint_title"-->
+            <!--android:padding="16dp"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--app:layout_constraintRight_toRightOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/spinner_notebook" />-->
+
+            <EditText
+                android:id="@+id/et_note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:background="#20000000"
+                android:padding="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_notebook" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+
 </layout>

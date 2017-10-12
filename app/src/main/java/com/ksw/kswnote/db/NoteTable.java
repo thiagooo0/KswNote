@@ -57,7 +57,7 @@ class NoteTable {
                 Log.d("notetable", "insert reuslt:" + l);
                 e.onNext(l);
             }
-        }).observeOn(Schedulers.io());
+        }).subscribeOn(Schedulers.io());
     }
 
     Observable<ArrayList<Note>> getRecommendNote(BriteDatabase database) {

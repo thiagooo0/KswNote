@@ -10,10 +10,10 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
  * Created by KwokSiuWang on 2017/9/24.
  */
 
-public class BaseViewHolder extends XRecyclerView.ViewHolder {
+public class BaseRecycleViewHolder extends XRecyclerView.ViewHolder {
     private ViewDataBinding binding;
 
-    public BaseViewHolder(View itemView) {
+    public BaseRecycleViewHolder(View itemView) {
         super(itemView);
     }
 
